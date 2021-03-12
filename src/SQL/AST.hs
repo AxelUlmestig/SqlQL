@@ -25,6 +25,7 @@ data SQL = Select (NonEmpty SelectColumn) (Maybe From) (Maybe Where) (Maybe Grou
          deriving (Eq, Show)
 
 -- select
+-- TODO: distinct on
 data SelectColumn = SelectColumn (Aliased Expression)
                   | SelectAll
                   | SelectAllTable TableName
@@ -38,6 +39,7 @@ data Aliased a = Aliased a (Maybe Text)
                deriving (Eq, Show)
 
 -- TODO: is [not] null
+-- TODO: functions
 data Expression = ExpTrue
                 | ExpFalse
                 | ExpString Text

@@ -22,20 +22,20 @@ type TableName = Text
 type ColumnName = Text
 
 data SQL = Select (NonEmpty SelectColumn) (Maybe From) (Maybe Where) (Maybe GroupBy) (Maybe OrderBy) (Maybe Limit)
-         deriving (Show)
+         deriving (Eq, Show)
 
 -- select
 data SelectColumn = SelectColumn (Aliased Expression)
                   | SelectAll
                   | SelectAllTable TableName
-                  deriving (Show)
+                  deriving (Eq, Show)
 
 data Column = Column ColumnName
             | TableColumn TableName ColumnName
-            deriving (Show)
+            deriving (Eq, Show)
 
 data Aliased a = Aliased a (Maybe Text)
-               deriving (Show)
+               deriving (Eq, Show)
 
 -- TODO: is [not] null
 data Expression = ExpTrue
@@ -46,7 +46,7 @@ data Expression = ExpTrue
                 | MetaExpression ExpressionOperator Expression Expression
                 | ExpColumn Column
                 | ParensedExp Expression
-                deriving (Show)
+                deriving (Eq, Show)
 
 data ExpressionOperator = ExpAnd
                         | ExpOr
@@ -60,39 +60,39 @@ data ExpressionOperator = ExpAnd
                         | ExpLesserThan
                         | ExpLesserThanEqual
                         | ExpExponentiate
-                        deriving (Show)
+                        deriving (Eq, Show)
 
 -- from
 data From = From (Aliased TableName) [Join]
-          deriving (Show)
+          deriving (Eq, Show)
 
 data Join = InnerJoin (Aliased TableName) Expression
           | LeftJoin (Aliased TableName) Expression
           | CrossJoin (Aliased TableName)
-          deriving (Show)
+          deriving (Eq, Show)
 
 -- where
 data Where = Where Expression
-           deriving (Show)
+           deriving (Eq, Show)
 
 -- group by
 -- TODO: 'group by ()' is technically valid SQL
 data GroupBy = GroupBy (NonEmpty Expression)
-             deriving (Show)
+             deriving (Eq, Show)
 
 -- order by
 data OrderBy = OrderBy (NonEmpty OrderExpression)
-             deriving (Show)
+             deriving (Eq, Show)
 
 data OrderExpression = OrderExpression Expression (Maybe OrderDirection)
-                     deriving (Show)
+                     deriving (Eq, Show)
 
 data OrderDirection = Asc | Desc
-                    deriving (Show)
+                    deriving (Eq, Show)
 
 -- limit
 data Limit = Limit Int | LimitAll
-           deriving (Show)
+           deriving (Eq, Show)
 
 -- TODO: group by
 

@@ -7,7 +7,7 @@ ghci
 ```
 ```haskell
 > :set -XOverloadedStrings
-> :l SQL/Parser.hs
+> :l SQL.hs
 >
-> parseTest sqlP "select * from users"
+> parse "select * from users"
 ```

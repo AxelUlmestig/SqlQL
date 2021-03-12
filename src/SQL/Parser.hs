@@ -1,6 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module SQL.Parser (sqlP) where
+module SQL.Parser (
+  sqlP
+) where
 
 import           Prelude                            hiding (tail)
 

@@ -26,8 +26,10 @@ executable sqlql
 
 library SqlParser
   hs-source-dirs:       src/SQL
-  exposed-modules:      SQL.AST
+  exposed-modules:      SQL
+                      , SQL.AST
                       , SQL.Parser
+                      , SQL.Format
   build-depends:        base >=4.14 && <4.15
                       , megaparsec
                       , text

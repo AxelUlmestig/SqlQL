@@ -70,6 +70,7 @@ data From = From (Aliased TableName) [Join]
 
 data Join = InnerJoin (Aliased TableName) Expression
           | LeftJoin (Aliased TableName) Expression
+          | RightJoin (Aliased TableName) Expression
           | CrossJoin (Aliased TableName)
           deriving (Eq, Show)
 

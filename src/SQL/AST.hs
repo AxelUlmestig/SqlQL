@@ -41,7 +41,6 @@ data Aliased a = Aliased a (Maybe Text)
                deriving (Eq, Show)
 
 -- TODO: is [not] null
--- TODO: functions
 -- TODO: not
 data Expression = ExpTrue
                 | ExpFalse

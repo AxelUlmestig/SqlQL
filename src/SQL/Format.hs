@@ -27,7 +27,15 @@ formatSelectColumn (SelectColumn (Aliased exp mAlias)) = maybe formattedExp (for
     formattedExp = formatExpression exp
 
 formatExpression :: Expression -> Text
-formatExpression (ExpColumn col) = formatColumn col
+formatExpression (ExpTrue)                     = "true"
+formatExpression (ExpFalse)                    = "false"
+formatExpression (ExpString str)               = "'" <> str <> "'"
+formatExpression (ExpInt num)                  = pack (show num)
+formatExpression (ExpFloat num)                = pack (show num)
+formatExpression (ExpColumn col)               = formatColumn col
+formatExpression (ExpFunc fName args)          = undefined -- TODO
+formatExpression (MetaExpression op exp1 exp2) = undefined -- TODO
+formatExpression (ParensedExp exp)             = "(" <> formatExpression exp <> ")"
 
 formatColumn :: Column -> Text
 formatColumn (Column col)          = col

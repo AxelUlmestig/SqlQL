@@ -114,7 +114,7 @@ tableNameP = columnNameP
 
 -- TODO: handle inner join without inner
 joinP :: Parser Join
-joinP = lexeme (innerJoinP <|> leftJoinP <|> crossJoinP)
+joinP = lexeme (innerJoinP <|> leftJoinP <|> rightJoinP <|> crossJoinP)
   where
     innerJoinP = InnerJoin
                  <$  lexeme (string' "inner join" <* space1)
@@ -123,6 +123,11 @@ joinP = lexeme (innerJoinP <|> leftJoinP <|> crossJoinP)
                  <*> expressionP
     leftJoinP =  LeftJoin
                  <$  lexeme (string' "left join" <* space1)
+                 <*> alias tableNameP
+                 <*  lexeme (string' "on" <* space1)
+                 <*> expressionP
+    rightJoinP =  RightJoin
+                 <$  lexeme (string' "right join" <* space1)
                  <*> alias tableNameP
                  <*  lexeme (string' "on" <* space1)
                  <*> expressionP

@@ -4,7 +4,7 @@ module SQL.Format (
   format
 ) where
 
-import           Data.List.NonEmpty (NonEmpty)
+import           Data.List.NonEmpty (NonEmpty, toList)
 import           Data.Text          (Text, pack)
 
 import           SQL.AST
@@ -17,7 +17,7 @@ format (Select cols from wher groupBy maybeOrderBy maybeLimit) =
   <> maybe "" formatOrderBy maybeOrderBy
 
 formatSelectColumns :: NonEmpty SelectColumn -> Text
-formatSelectColumns = foldr (<>) "" . fmap ((<> ", ") . formatSelectColumn)
+formatSelectColumns = formatCommaSeparated formatSelectColumn . toList
 
 formatSelectColumn :: SelectColumn -> Text
 formatSelectColumn SelectAll = "*"
@@ -33,7 +33,7 @@ formatExpression (ExpString str)               = "'" <> str <> "'"
 formatExpression (ExpInt num)                  = pack (show num)
 formatExpression (ExpFloat num)                = pack (show num)
 formatExpression (ExpColumn col)               = formatColumn col
-formatExpression (ExpFunc fName args)          = undefined -- TODO
+formatExpression (ExpFunc fName args)          = fName <> "(" <> formatCommaSeparated formatExpression args <> ")"
 formatExpression (MetaExpression op exp1 exp2) = undefined -- TODO
 formatExpression (ParensedExp exp)             = "(" <> formatExpression exp <> ")"
 
@@ -48,7 +48,7 @@ formatLimit (Limit number) = "limit " <> pack (show number)
 formatOrderBy :: OrderBy -> Text
 formatOrderBy (OrderBy (orders)) =
   "order by "
-  <> foldr (<>) "" (fmap ((<> ", ") . formatOrderExpression) (orders))
+  <> formatCommaSeparated formatOrderExpression (toList orders)
 
 formatOrderExpression :: OrderExpression -> Text
 formatOrderExpression (OrderExpression (exp) maybeDir) =
@@ -58,3 +58,7 @@ formatOrderExpression (OrderExpression (exp) maybeDir) =
 formatOrderDirection :: OrderDirection -> Text
 formatOrderDirection (Asc)  = "asc"
 formatOrderDirection (Desc) = "desc"
+
+formatCommaSeparated :: (a -> Text) -> [a] -> Text
+formatCommaSeparated f (h:t) = f h <> (foldr (<>) "" . fmap ((", " <>) . f)) t
+formatCommaSeparated f ([])  = ""

@@ -37,6 +37,7 @@ data Column = Column ColumnName
 data Aliased a = Aliased a (Maybe Text)
                deriving (Show)
 
+-- TODO: is [not] null
 data Expression = ExpTrue
                 | ExpFalse
                 | ExpString Text
@@ -53,6 +54,7 @@ data ExpressionOperator = ExpAnd
                         | ExpSubtract
                         | ExpMultiply
                         | ExpDivide
+                        | ExpEqual
                         | ExpGreaterThan
                         | ExpGreaterThanEqual
                         | ExpLesserThan

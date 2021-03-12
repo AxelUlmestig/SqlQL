@@ -86,6 +86,7 @@ expressionP = do
                <|> ExpSubtract          <$ char    '-'
                <|> ExpMultiply          <$ char    '*'
                <|> ExpDivide            <$ char    '/'
+               <|> ExpEqual             <$ char    '='
                <|> ExpGreaterThan       <$ char    '>'
                <|> ExpGreaterThanEqual  <$ string' ">="
                <|> ExpLesserThan        <$ char    '<'

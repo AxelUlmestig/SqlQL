@@ -76,6 +76,7 @@ expressionP = do
                    ExpTrue <$ string' "true"
                    <|> ExpFalse <$ string' "false"
                    <|> ExpString . pack <$ char '\'' <*> manyTill anySingle (char '\'')
+                   <|> try (ExpFunc <$> columnNameP <*> between (lexeme (char '(')) (lexeme (char ')')) (sepBy expressionP (lexeme (char ','))))
                    <|> ExpColumn <$> columnP
                    <|> ExpInt <$> L.signed space L.decimal
                    <|> ExpFloat <$> L.signed space L.float

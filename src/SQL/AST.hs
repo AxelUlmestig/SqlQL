@@ -20,6 +20,7 @@ import           Data.Text          (Text)
 
 type TableName = Text
 type ColumnName = Text
+type FunctionName = Text
 
 data SQL = Select (NonEmpty SelectColumn) (Maybe From) (Maybe Where) (Maybe GroupBy) (Maybe OrderBy) (Maybe Limit)
          deriving (Eq, Show)
@@ -40,13 +41,15 @@ data Aliased a = Aliased a (Maybe Text)
 
 -- TODO: is [not] null
 -- TODO: functions
+-- TODO: not
 data Expression = ExpTrue
                 | ExpFalse
                 | ExpString Text
                 | ExpInt Int
                 | ExpFloat Float
-                | MetaExpression ExpressionOperator Expression Expression
                 | ExpColumn Column
+                | ExpFunc FunctionName [Expression]
+                | MetaExpression ExpressionOperator Expression Expression
                 | ParensedExp Expression
                 deriving (Eq, Show)
 

@@ -144,7 +144,14 @@ joinConditionP = lexeme (onJoinConditionP <|> usingJoinConditionP)
                       <$ string' "on"
                       <* space1
                       <*> expressionP
-    usingJoinConditionP = undefined
+    usingJoinConditionP = UsingJoinCondition
+                      <$ string' "using"
+                      <* space
+                      <* char '('
+                      <* space
+                      <*> columnNameP
+                      <* space
+                      <* char ')'
 
 -- where
 whereP :: Parser Where

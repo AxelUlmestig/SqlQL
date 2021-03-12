@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Parser (sqlP) where
+module SQL.Parser (sqlP) where
 
 import           Prelude                            hiding (tail)
 
@@ -14,7 +14,7 @@ import           Text.Megaparsec
 import           Text.Megaparsec.Char
 import qualified Text.Megaparsec.Char.Lexer         as L
 
-import           Sql
+import           SQL.AST
 
 type Parser = Parsec Void Text
 

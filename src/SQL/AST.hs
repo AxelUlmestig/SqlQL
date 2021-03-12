@@ -1,4 +1,4 @@
-module Sql (
+module SQL.AST (
   SQL(..),
   Column(..),
   SelectColumn(..),

@@ -4,6 +4,7 @@ module SQL.AST (
   SelectColumn(..),
   From(..),
   Join(..),
+  JoinCondition(..),
   Where(..),
   GroupBy(..),
   Expression(..),
@@ -71,11 +72,15 @@ data ExpressionOperator = ExpAnd
 data From = From (Aliased TableName) [Join]
           deriving (Eq, Show)
 
-data Join = InnerJoin (Aliased TableName) Expression
-          | LeftJoin (Aliased TableName) Expression
-          | RightJoin (Aliased TableName) Expression
+data Join = InnerJoin (Aliased TableName) JoinCondition
+          | LeftJoin  (Aliased TableName) JoinCondition
+          | RightJoin (Aliased TableName) JoinCondition
           | CrossJoin (Aliased TableName)
           deriving (Eq, Show)
+
+data JoinCondition = OnJoinCondition Expression
+                   | UsingJoinCondition ColumnName
+                   deriving (Eq, Show)
 
 -- where
 data Where = Where Expression

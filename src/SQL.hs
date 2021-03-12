@@ -1,5 +1,6 @@
 module SQL (
   parse,
+  parseTest,
   format
 ) where
 
@@ -13,3 +14,6 @@ import           SQL.Parser      (sqlP)
 
 parse :: Text -> Either (P.ParseErrorBundle Text Void) SQL
 parse = P.parse sqlP "name of source file"
+
+parseTest :: Text -> IO ()
+parseTest = P.parseTest sqlP

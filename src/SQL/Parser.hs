@@ -33,6 +33,7 @@ sqlP = lexeme $ space
                 <*> optional groupByP
                 <*> optional orderByP
                 <*> optional limitP
+                <* eof
 
 -- select
 selectColumnsP :: Parser (NonEmpty SelectColumn)
@@ -113,27 +114,37 @@ tableNameP :: Parser Text
 tableNameP = columnNameP
 
 -- TODO: handle inner join without inner
+-- join b on a.id = b.id
+-- join b using(id)
 joinP :: Parser Join
 joinP = lexeme (innerJoinP <|> leftJoinP <|> rightJoinP <|> crossJoinP)
   where
     innerJoinP = InnerJoin
                  <$  lexeme (string' "inner join" <* space1)
                  <*> alias tableNameP
-                 <*  lexeme (string' "on" <* space1)
-                 <*> expressionP
+                 <*> joinConditionP
+                 -- <|>  lexeme (string' "using" <* space1)
+                 -- <*> expressionP
     leftJoinP =  LeftJoin
                  <$  lexeme (string' "left join" <* space1)
                  <*> alias tableNameP
-                 <*  lexeme (string' "on" <* space1)
-                 <*> expressionP
+                 <*> joinConditionP
     rightJoinP =  RightJoin
                  <$  lexeme (string' "right join" <* space1)
                  <*> alias tableNameP
-                 <*  lexeme (string' "on" <* space1)
-                 <*> expressionP
+                 <*> joinConditionP
     crossJoinP = CrossJoin
                  <$  lexeme (string' "cross join" <* space1)
                  <*> alias tableNameP
+
+joinConditionP :: Parser JoinCondition
+joinConditionP = lexeme (onJoinConditionP <|> usingJoinConditionP)
+  where
+    onJoinConditionP = OnJoinCondition
+                      <$ string' "on"
+                      <* space1
+                      <*> expressionP
+    usingJoinConditionP = undefined
 
 -- where
 whereP :: Parser Where

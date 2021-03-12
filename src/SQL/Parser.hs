@@ -145,13 +145,9 @@ joinConditionP = lexeme (onJoinConditionP <|> usingJoinConditionP)
                       <* space1
                       <*> expressionP
     usingJoinConditionP = UsingJoinCondition
-                      <$ string' "using"
-                      <* space
-                      <* char '('
-                      <* space
-                      <*> columnNameP
-                      <* space
-                      <* char ')'
+                      <$  string' "using"
+                      <*  space
+                      <*> between (lexeme (char '(')) (lexeme (char ')')) (NE.sepBy1 (lexeme columnNameP) (lexeme (char ',')))
 
 -- where
 whereP :: Parser Where

@@ -79,7 +79,7 @@ data Join = InnerJoin (Aliased TableName) JoinCondition
           deriving (Eq, Show)
 
 data JoinCondition = OnJoinCondition Expression
-                   | UsingJoinCondition ColumnName
+                   | UsingJoinCondition (NonEmpty ColumnName)
                    deriving (Eq, Show)
 
 -- where

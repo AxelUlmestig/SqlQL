@@ -9,5 +9,9 @@ ghci
 > :set -XOverloadedStrings
 > :l SQL.hs
 >
+> -- parse to AST
 > parse "select * from users"
+>
+> -- turn AST back into text
+> format <$> parse "select * from users"
 ```

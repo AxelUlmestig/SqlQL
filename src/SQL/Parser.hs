@@ -117,7 +117,7 @@ tableNameP = columnNameP
 -- join b on a.id = b.id
 -- join b using(id)
 joinP :: Parser Join
-joinP = lexeme (innerJoinP <|> leftJoinP <|> rightJoinP <|> crossJoinP)
+joinP = lexeme (innerJoinP <|> leftJoinP <|> rightJoinP <|> fullJoinP <|> crossJoinP)
   where
     innerJoinP = InnerJoin
                  <$  lexeme (string' "inner join" <* space1)
@@ -131,6 +131,10 @@ joinP = lexeme (innerJoinP <|> leftJoinP <|> rightJoinP <|> crossJoinP)
                  <*> joinConditionP
     rightJoinP =  RightJoin
                  <$  lexeme (string' "right join" <* space1)
+                 <*> alias tableNameP
+                 <*> joinConditionP
+    fullJoinP =  FullJoin
+                 <$  lexeme (string' "full join" <* space1)
                  <*> alias tableNameP
                  <*> joinConditionP
     crossJoinP = CrossJoin

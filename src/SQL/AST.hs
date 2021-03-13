@@ -74,6 +74,7 @@ data From = From (Aliased TableName) [Join]
 data Join = InnerJoin (Aliased TableName) JoinCondition
           | LeftJoin  (Aliased TableName) JoinCondition
           | RightJoin (Aliased TableName) JoinCondition
+          | FullJoin (Aliased TableName) JoinCondition
           | CrossJoin (Aliased TableName)
           deriving (Eq, Show)
 

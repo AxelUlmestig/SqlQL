@@ -142,7 +142,7 @@ joinP = lexeme (innerJoinP <|> leftJoinP <|> rightJoinP <|> fullJoinP <|> crossJ
                  <*> alias tableNameP
 
 joinConditionP :: Parser JoinCondition
-joinConditionP = lexeme (onJoinConditionP <|> usingJoinConditionP)
+joinConditionP = lexeme (onJoinConditionP <|> usingJoinConditionP <|> naturalJoinConditionP)
   where
     onJoinConditionP = OnJoinCondition
                       <$ string' "on"
@@ -152,6 +152,8 @@ joinConditionP = lexeme (onJoinConditionP <|> usingJoinConditionP)
                       <$  string' "using"
                       <*  space
                       <*> between (lexeme (char '(')) (lexeme (char ')')) (NE.sepBy1 (lexeme columnNameP) (lexeme (char ',')))
+    naturalJoinConditionP = NaturalJoinCondition
+                      <$ string' "natural"
 
 -- where
 whereP :: Parser Where

@@ -1,5 +1,6 @@
 module SQL.AST (
   SQL(..),
+  Distinct(..),
   Column(..),
   SelectColumn(..),
   From(..),
@@ -23,11 +24,13 @@ type TableName = Text
 type ColumnName = Text
 type FunctionName = Text
 
-data SQL = Select (NonEmpty SelectColumn) (Maybe From) (Maybe Where) (Maybe GroupBy) (Maybe OrderBy) (Maybe Limit)
+data SQL = Select (Maybe Distinct) (NonEmpty SelectColumn) (Maybe From) (Maybe Where) (Maybe GroupBy) (Maybe OrderBy) (Maybe Limit)
          deriving (Eq, Show)
 
 -- select
--- TODO: distinct on
+data Distinct = Distinct | DistinctOn (NonEmpty Expression)
+              deriving (Eq, Show)
+
 data SelectColumn = SelectColumn (Aliased Expression)
                   | SelectAll
                   | SelectAllTable TableName
@@ -103,6 +106,3 @@ data OrderDirection = Asc | Desc
 -- limit
 data Limit = Limit Int | LimitAll
            deriving (Eq, Show)
-
--- TODO: group by
-

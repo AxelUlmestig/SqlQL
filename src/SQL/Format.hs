@@ -13,8 +13,10 @@ format :: SQL -> Text
 format (Select cols from wher groupBy maybeOrderBy maybeLimit) =
   "select "
   <> formatSelectColumns cols
-  <> maybe "" formatLimit maybeLimit
+  <> " "
   <> maybe "" formatOrderBy maybeOrderBy
+  <> " "
+  <> maybe "" formatLimit maybeLimit
 
 formatSelectColumns :: NonEmpty SelectColumn -> Text
 formatSelectColumns = formatCommaSeparated formatSelectColumn . toList

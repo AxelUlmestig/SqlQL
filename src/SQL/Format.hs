@@ -16,7 +16,6 @@ format (Select cols from wher maybeGroupBy maybeOrderBy maybeLimit) =
   <> " "
   <> maybe "" formatGroupBy maybeGroupBy
   <> maybe "" formatOrderBy maybeOrderBy
-  <> " "
   <> maybe "" formatLimit maybeLimit
 
 formatSelectColumns :: NonEmpty SelectColumn -> Text
@@ -58,6 +57,7 @@ formatOrderBy :: OrderBy -> Text
 formatOrderBy (OrderBy (orders)) =
   "order by "
   <> formatCommaSeparated formatOrderExpression (toList orders)
+  <> " "
 
 formatOrderExpression :: OrderExpression -> Text
 formatOrderExpression (OrderExpression (exp) maybeDir) =

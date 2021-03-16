@@ -38,15 +38,15 @@ sqlP = lexeme $ space
 
 -- select
 distinctP :: Parser Distinct
-distinctP = lexeme $ distinctOnP <|> simpleDistinctP
+distinctP = lexeme $ try distinctOnP <|> simpleDistinctP
   where
-    distinctOnP     = lexeme $
-                        string' "distinct on"
+    distinctOnP     = string' "distinct"
+                        <*  space1
+                        <*  string' "on"
                         <*  space
                         $>  DistinctOn
                         <*> between (lexeme (char '(')) (lexeme (char ')')) (NE.sepBy1 (lexeme expressionP) (lexeme (char ',')))
-    simpleDistinctP = lexeme $
-                        string' "distinct"
+    simpleDistinctP = string' "distinct"
                         $> Distinct
 
 

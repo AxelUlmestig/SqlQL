@@ -27,6 +27,7 @@ sqlP :: Parser SQL
 sqlP = lexeme $ space
                 $>  Select
                 <*  lexeme (string' "select")
+                <*> optional distinctP
                 <*> selectColumnsP
                 <*> optional fromP
                 <*> optional whereP
@@ -36,6 +37,20 @@ sqlP = lexeme $ space
                 <* eof
 
 -- select
+distinctP :: Parser Distinct
+distinctP = lexeme $ try distinctOnP <|> simpleDistinctP
+  where
+    distinctOnP     = string' "distinct"
+                        <*  space1
+                        <*  string' "on"
+                        <*  space
+                        $>  DistinctOn
+                        <*> between (lexeme (char '(')) (lexeme (char ')')) (NE.sepBy1 (lexeme expressionP) (lexeme (char ',')))
+    simpleDistinctP = string' "distinct"
+                        $> Distinct
+
+
+
 selectColumnsP :: Parser (NonEmpty SelectColumn)
 selectColumnsP = lexeme $ NE.sepBy1 selectColumnP (lexeme (char ','))
 

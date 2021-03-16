@@ -10,7 +10,7 @@ import           Data.Text          (Text, pack)
 import           SQL.AST
 
 format :: SQL -> Text
-format (Select cols from wher maybeGroupBy maybeOrderBy maybeLimit) =
+format (Select distinct cols from wher maybeGroupBy maybeOrderBy maybeLimit) =
   "select "
   <> formatSelectColumns cols
   <> maybe "" formatGroupBy maybeGroupBy

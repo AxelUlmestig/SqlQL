@@ -10,12 +10,11 @@ import           Data.Text          (Text, pack)
 import           SQL.AST
 
 format :: SQL -> Text
-format (Select cols from wher groupBy maybeOrderBy maybeLimit) =
+format (Select cols from wher maybeGroupBy maybeOrderBy maybeLimit) =
   "select "
   <> formatSelectColumns cols
-  <> " "
+  <> maybe "" formatGroupBy maybeGroupBy
   <> maybe "" formatOrderBy maybeOrderBy
-  <> " "
   <> maybe "" formatLimit maybeLimit
 
 formatSelectColumns :: NonEmpty SelectColumn -> Text
@@ -44,12 +43,17 @@ formatColumn (Column col)          = col
 formatColumn (TableColumn tbl col) = tbl <> "." <> col
 
 formatLimit :: Limit -> Text
-formatLimit (LimitAll)     = "limit all"
-formatLimit (Limit number) = "limit " <> pack (show number)
+formatLimit (LimitAll)     = " limit all"
+formatLimit (Limit number) = " limit " <> pack (show number)
+
+formatGroupBy :: GroupBy -> Text
+formatGroupBy (GroupBy (groups)) =
+  " group by "
+  <> formatCommaSeparated formatExpression (toList groups)
 
 formatOrderBy :: OrderBy -> Text
 formatOrderBy (OrderBy (orders)) =
-  "order by "
+  " order by "
   <> formatCommaSeparated formatOrderExpression (toList orders)
 
 formatOrderExpression :: OrderExpression -> Text
